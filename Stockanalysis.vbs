@@ -1,14 +1,15 @@
-    Sub stockmarket()
+Sub stockmarket()
     
     'define variables
     Dim stockname   As String
-    Dim percetage   As Double
+    Dim percentage   As Double
     Dim yearlychange As Double
     Dim volume      As Double
     Dim begyearprice As Double
     Dim endyearprice As Double
     Dim enddateyear As Long
     Dim begdateyear As Long
+    Dim lastrow     As Long
     
     volume = 0
     endyearprice = 1
@@ -20,8 +21,10 @@
     Dim tablerow    As Integer
     tablerow = 2
     
+    lastrow = Cells(Rows.Count, "A").End(xlUp).Row
+    
     'create loop for volume and name
-    For i = 2 To 70926
+    For i = 2 To lastrow
         If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
             stockname = Cells(i, 1).Value
             volume = volume + Cells(i, 7).Value
@@ -42,7 +45,12 @@
             
             'calculate yearly change and percentage
             yearlychange = endyearprice - begyearprice
-            percentage = yearlychange / begyearprice
+            
+            If begyearprice = 0 Then
+                percentage = 1
+            Else
+                percentage = yearlychange / begyearprice
+            End If
             
             'print info in table
             Range("K" & tablerow).Value = yearlychange
